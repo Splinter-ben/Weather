@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import com.splinter.weatherforcast.utilities.Alert;
 import com.splinter.weatherforcast.utilities.Api;
 
@@ -43,7 +46,13 @@ public class MainFrame extends JFrame {
 					@Override
 					public void onResponse(Call arg0, Response response) throws IOException {
 						if (response.isSuccessful()) {
-							System.out.println(response.body().string());	
+							String jsonData = response.body().string();
+							JSONObject forecast = (JSONObject) JSONValue.parse(jsonData);
+							System.out.println(forecast.get("timezone"));
+							
+							JSONObject currently = (JSONObject) forecast.get("currently");
+							System.out.println(currently.get("temperature"));
+							
 						} else {
 							Alert.error(MainFrame.this, "Error", "Oops an error has occurred");
 							System.err.println("Error: " + response.body().string());		

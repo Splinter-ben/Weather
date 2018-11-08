@@ -7,3 +7,5 @@ https://jar-download.com/artifact-search/kotlin-stdlib
 OkHttp http://square.github.io/okhttp/
 
 OkIo https://github.com/square/okio
+
+Json-Simple https://code.google.com/archive/p/json-simple/
