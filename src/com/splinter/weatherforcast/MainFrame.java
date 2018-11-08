@@ -26,16 +26,15 @@ public class MainFrame extends JFrame {
 		// String forcastUrl = "https://api.darksky.net/forecast/" + apiKey + "/" + latitude + "," + longitude;
 		String forecastUrl= String.format("https://api.darksky.net/forecast/%s/%f,%f", apiKey, latitude, longitude);
 		
-		System.out.println("Avant la requete...");
-		// Call our internal Class
-		new ForeCastWorker(forecastUrl).execute();
+		System.out.println("Avant la requete...");	
 		System.out.println("Après la requete...");
 		
 	}
 		  
 	/**
-	 * Internal Class
+	 * Synchronous GET with an internal class
 	 */
+	/*
 	class ForeCastWorker extends SwingWorker<String, Void> {
 
 		private String _forecastUrl; 
@@ -75,59 +74,58 @@ public class MainFrame extends JFrame {
 		}		
 		
 	}
+	*/
 	
-	
-		/**
-		 * 	Asynchronous GET
-		 */
-		/*
-		// Anonymous Class
-		new SwingWorker<String, Void>() {
-	
-			@Override
-			protected String doInBackground() throws Exception {
-				OkHttpClient httpClient = new OkHttpClient();
-				Request request = new Request.Builder()
-					      .url(forecastUrl)
-					      .build();
-				  try {
-					  Response response = httpClient.newCall(request)
-							  .execute();
-				return	response.body().string();
-				} catch (Exception e) {
-					System.err.println("Error: " + e);
-				}
-				return null;
+	/**
+	 * 	Synchronous GET with an anonymous class
+	 */
+	/*
+	new SwingWorker<String, Void>() {
+
+		@Override
+		protected String doInBackground() throws Exception {
+			OkHttpClient httpClient = new OkHttpClient();
+			Request request = new Request.Builder()
+				      .url(forecastUrl)
+				      .build();
+			  try {
+				  Response response = httpClient.newCall(request)
+						  .execute();
+			return	response.body().string();
+			} catch (Exception e) {
+				System.err.println("Error: " + e);
 			}
-			
-			// when the task is done
-			@Override
-			protected void done() {
-				try {
-					System.out.println(get());
-				} catch (InterruptedException | ExecutionException e) {
-					System.err.println("Error: " + e);
-				}
-			}
-		}.execute();		
-		*/
-	
-		
-		/**
-		 *  Synchronous GET
-		 */
-		/*
-		System.out.println("Avant la requete...");
-		OkHttpClient httpClient = new OkHttpClient();
-		Request request = new Request.Builder()
-			      .url(forecastUrl)
-			      .build();
-		  try {
-			  Response response = httpClient.newCall(request)
-					  .execute();
-			System.out.println(response.body().string());
-		} catch (Exception e) {
-			System.err.println("Error: " + e);
+			return null;
 		}
-	  */
+		
+		// when the task is done
+		@Override
+		protected void done() {
+			try {
+				System.out.println(get());
+			} catch (InterruptedException | ExecutionException e) {
+				System.err.println("Error: " + e);
+			}
+		}
+	}.execute();		
+	*/
+
+	
+	/**
+	 *  Synchronous GET directly
+	 */
+	/*
+	System.out.println("Avant la requete...");
+	OkHttpClient httpClient = new OkHttpClient();
+	Request request = new Request.Builder()
+		      .url(forecastUrl)
+		      .build();
+	  try {
+		  Response response = httpClient.newCall(request)
+				  .execute();
+		System.out.println(response.body().string());
+	} catch (Exception e) {
+		System.err.println("Error: " + e);
+	}
+  */
 }
