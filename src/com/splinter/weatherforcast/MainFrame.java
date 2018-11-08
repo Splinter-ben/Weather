@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
+import com.splinter.weatherforcast.models.CurrentWeather;
 import com.splinter.weatherforcast.utilities.Alert;
 import com.splinter.weatherforcast.utilities.Api;
 
@@ -52,21 +53,17 @@ public class MainFrame extends JFrame {
 								String jsonData = body.string();
 								JSONObject forecast;
 								forecast = (JSONObject) JSONValue.parseWithException(jsonData);
-								String timezone = (String) forecast.get("timezone");
-
+								CurrentWeather currentWeather = new CurrentWeather();
 								JSONObject currently = (JSONObject) forecast.get("currently");
-								long time = (long) currently.get("time");
-								double temperature = Double.parseDouble(currently.get("temperature") + "");
-								double hummidity = (double) currently.get("humidity");
-								double precipProbability = Double.parseDouble(currently.get("precipProbability") + "");
-								String summary = (String) currently.get("summary");
 								
-								Date date = new Date(time*1000L);
-								SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss z"); 
-								formatter.setTimeZone(java.util.TimeZone.getTimeZone("Europe/Paris")); 
-								String timeSring = formatter.format(date);
+								currentWeather.set_timezone((String) forecast.get("timezone"));
+								currentWeather.set_time((long) currently.get("time"));
+								currentWeather.set_temperature(Double.parseDouble(currently.get("temperature") + ""));
+								currentWeather.set_humidity(Double.parseDouble(currently.get("humidity") + ""));
+								currentWeather.set_precipProbability(Double.parseDouble(currently.get("precipProbability") + ""));
+								currentWeather.set_summary((String) currently.get("summary"));
 								
-								System.out.println(timeSring);
+								System.out.println(currentWeather.getFormattedTime());
 							} else {
 								Alert.error(MainFrame.this, GENERIC_ERROR_MSG);
 							}
