@@ -1,5 +1,6 @@
 package com.splinter.weatherforcast;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
@@ -26,13 +27,63 @@ public class MainFrame extends JFrame {
 		String forecastUrl= String.format("https://api.darksky.net/forecast/%s/%f,%f", apiKey, latitude, longitude);
 		
 		System.out.println("Avant la requete...");
+		// Call our internal Class
+		new ForeCastWorker(forecastUrl).execute();
+		System.out.println("Après la requete...");
 		
+	}
+		  
+	/**
+	 * Internal Class
+	 */
+	class ForeCastWorker extends SwingWorker<String, Void> {
+
+		private String _forecastUrl; 
+		
+		public ForeCastWorker(String forecastUrl) {
+			this._forecastUrl = forecastUrl;
+		}
+
+
+		@Override
+		protected String doInBackground() throws Exception {
+			OkHttpClient httpClient = new OkHttpClient();
+			Request request = new Request.Builder()
+				      .url(_forecastUrl)
+				      .build();
+			  try {
+				  Response response = httpClient.newCall(request)
+						  .execute();
+				  // Response verification
+				  if(response.isSuccessful()) {					  
+					  return	response.body().string();
+				  }
+			} catch (Exception e) {
+				System.err.println("Error: " + e);
+			}
+			return null;
+		}
+		
+		@Override
+		protected void done() {
+			try {
+				// CallBack GET method
+				System.out.println(get());
+			} catch (InterruptedException | ExecutionException e) {
+				System.err.println("Error: " + e);
+			}
+		}		
+		
+	}
+	
+	
 		/**
 		 * 	Asynchronous GET
 		 */
+		/*
 		// Anonymous Class
 		new SwingWorker<String, Void>() {
-
+	
 			@Override
 			protected String doInBackground() throws Exception {
 				OkHttpClient httpClient = new OkHttpClient();
@@ -59,9 +110,8 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}.execute();		
-		  System.out.println("Après la requete...");
-		
-		  
+		*/
+	
 		
 		/**
 		 *  Synchronous GET
@@ -80,5 +130,4 @@ public class MainFrame extends JFrame {
 			System.err.println("Error: " + e);
 		}
 	  */
-	}
 }
