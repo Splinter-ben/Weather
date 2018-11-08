@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,9 +28,30 @@ public class MainFrame extends JFrame {
 		// String forcastUrl = "https://api.darksky.net/forecast/" + apiKey + "/" + latitude + "," + longitude;
 		String forecastUrl= String.format("https://api.darksky.net/forecast/%s/%f,%f", apiKey, latitude, longitude);
 		
-		System.out.println("Avant la requete...");	
+		System.out.println("Avant la requete...");
+		/**
+		 * Asynchronous GET
+		 */
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+			      .url(forecastUrl)
+			      .build();
+		client.newCall(request)
+				// Anonymous Class Callback
+				.enqueue(new Callback() {
+					
+					@Override
+					public void onResponse(Call arg0, Response response) throws IOException {
+						System.out.println(Thread.currentThread().getName());
+						System.out.println(response.body().string());					
+					}
+					
+					@Override
+					public void onFailure(Call call, IOException e) {
+						System.err.println("Error: " + e.getMessage());						
+					}
+				});		
 		System.out.println("Après la requete...");
-		
 	}
 		  
 	/**
