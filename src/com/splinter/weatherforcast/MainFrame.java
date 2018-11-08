@@ -1,6 +1,9 @@
 package com.splinter.weatherforcast;
 
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.JFrame;
+import javax.swing.SwingWorker;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,6 +25,49 @@ public class MainFrame extends JFrame {
 		// String forcastUrl = "https://api.darksky.net/forecast/" + apiKey + "/" + latitude + "," + longitude;
 		String forecastUrl= String.format("https://api.darksky.net/forecast/%s/%f,%f", apiKey, latitude, longitude);
 		
+		System.out.println("Avant la requete...");
+		
+		/**
+		 * 	Asynchronous GET
+		 */
+		// Anonymous Class
+		new SwingWorker<String, Void>() {
+
+			@Override
+			protected String doInBackground() throws Exception {
+				OkHttpClient httpClient = new OkHttpClient();
+				Request request = new Request.Builder()
+					      .url(forecastUrl)
+					      .build();
+				  try {
+					  Response response = httpClient.newCall(request)
+							  .execute();
+				return	response.body().string();
+				} catch (Exception e) {
+					System.err.println("Error: " + e);
+				}
+				return null;
+			}
+			
+			// when the task is done
+			@Override
+			protected void done() {
+				try {
+					System.out.println(get());
+				} catch (InterruptedException | ExecutionException e) {
+					System.err.println("Error: " + e);
+				}
+			}
+		}.execute();		
+		  System.out.println("Après la requete...");
+		
+		  
+		
+		/**
+		 *  Synchronous GET
+		 */
+		/*
+		System.out.println("Avant la requete...");
 		OkHttpClient httpClient = new OkHttpClient();
 		Request request = new Request.Builder()
 			      .url(forecastUrl)
@@ -33,5 +79,6 @@ public class MainFrame extends JFrame {
 		} catch (Exception e) {
 			System.err.println("Error: " + e);
 		}
+	  */
 	}
 }
