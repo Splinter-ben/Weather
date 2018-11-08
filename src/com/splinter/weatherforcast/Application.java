@@ -9,7 +9,7 @@ public class Application {
 	public static void main(String[] args) {
 		// System.out.println(Thread.currentThread().getName());
 		EventQueue.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				// System.out.println(Thread.currentThread().getName());
@@ -18,10 +18,9 @@ public class Application {
 				mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				mainFrame.pack();
 				mainFrame.setLocationRelativeTo(null);
-				mainFrame.setVisible(true);			
+				mainFrame.setVisible(true);
 			}
 		});
-		
 
 	}
 
