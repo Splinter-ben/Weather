@@ -35,8 +35,8 @@ public class CurrentWeather {
 	}
 	
 	
-	public double get_temperature() {
-		return _temperature;
+	public int get_temperature() {
+		return (int) Math.round(_temperature);
 	}
 	public void set_temperature(double _temperature) {
 		this._temperature = _temperature;
@@ -47,8 +47,8 @@ public class CurrentWeather {
 	public void set_humidity(double _humidity) {
 		this._humidity = _humidity;
 	}
-	public double get_precipProbability() {
-		return _precipProbability;
+	public int get_precipProbability() {
+		return (int) Math.round(_precipProbability);
 	}
 	public void set_precipProbability(double _precipProbability) {
 		this._precipProbability = _precipProbability;
